@@ -6,7 +6,7 @@ namespace WriteNumbersOneToTrillion
     {
         static void Main(string[] args)
         {
-            long input = 111222333444555;
+            long input = 101222333444555;
 
             long trillions = 0;
             long billions = 0;
@@ -19,21 +19,9 @@ namespace WriteNumbersOneToTrillion
             long oneThousand = 1000;
 
             PerformCount(ref input, ref trillions, oneTrillion, "trillion");
-            PrintNumberInEnglish(trillions);
-            PrintMultiplier(trillions, "trillion");
-
             PerformCount(ref input, ref billions, oneBillion, "billion");
-            PrintNumberInEnglish(billions);
-            PrintMultiplier(billions, "billion");
-
             PerformCount(ref input, ref millions, oneMillion, "million");
-            PrintNumberInEnglish(millions);
-            PrintMultiplier(millions, "million");
-
             PerformCount(ref input, ref thousands, oneThousand, "thousand");
-            PrintNumberInEnglish(thousands);
-            PrintMultiplier(thousands, "thousand");
-
             PrintNumberInEnglish(input);
 
             Console.WriteLine();
@@ -46,13 +34,18 @@ namespace WriteNumbersOneToTrillion
                 quantityOfMulitpier = input / mulitpier;
                 input -= (quantityOfMulitpier * mulitpier);
             }
+
+            if (quantityOfMulitpier > 0)
+            {
+                PrintNumberInEnglish(quantityOfMulitpier);
+                PrintMultiplier(quantityOfMulitpier, multiplierInEnglish);
+            }
         }
 
         public static void PrintNumberInEnglish(long number)
         {
             string[] singleDigits = new string[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
             string[] tensArray = new string[] { "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
-
             bool useAnd = false;
 
             if (number > 0)
@@ -67,18 +60,27 @@ namespace WriteNumbersOneToTrillion
 
                 if (number > 19)
                 {
-                    UseAndCheck(useAnd);
-                    useAnd = false;
                     int tens = (int)number / 10;
-                    Console.Write($"{tensArray[tens]} ");
+                    Console.Write($"and {tensArray[tens]} ");
                     number -= (tens * 10);
+                    useAnd = false;
+                }
+
+                if (number > 9)
+                {
+                    Console.Write($"and {singleDigits[number]} ");
+                    number = 0;
                 }
 
                 if (number > 0)
                 {
-                    UseAndCheck(useAnd);
+                    if (useAnd)
+                    {
+                        Console.Write($"and ");
+                    }
                     Console.Write($"{singleDigits[number]} ");
                 }
+
                 //Console.Write($"{number} ");
             }
 
@@ -90,15 +92,8 @@ namespace WriteNumbersOneToTrillion
             {
                 Console.Write($"{multiplierInEnglish} ");
             }
-
         }
 
-        public static void UseAndCheck(bool useAnd)
-        {
-            if (useAnd)
-            {
-                Console.Write("and ");
-            }
-        }
+        
     }
 }
