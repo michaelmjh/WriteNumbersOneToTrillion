@@ -6,50 +6,98 @@ namespace WriteNumbersOneToTrillion
     {
         static void Main(string[] args)
         {
-            long input = 1002333004560;
+            long input = 111222333444555;
 
             long trillions = 0;
             long billions = 0;
             long millions = 0;
             long thousands = 0;
-            long hundreds = 0;
-            long tens = 0;
 
             long oneTrillion = 1000000000000;
             long oneBillion = 1000000000;
             long oneMillion = 1000000;
             long oneThousand = 1000;
-            long oneHundred = 100;
 
             PerformCount(ref input, ref trillions, oneTrillion, "trillion");
+            PrintNumberInEnglish(trillions);
+            PrintMultiplier(trillions, "trillion");
+
             PerformCount(ref input, ref billions, oneBillion, "billion");
+            PrintNumberInEnglish(billions);
+            PrintMultiplier(billions, "billion");
+
             PerformCount(ref input, ref millions, oneMillion, "million");
+            PrintNumberInEnglish(millions);
+            PrintMultiplier(millions, "million");
+
             PerformCount(ref input, ref thousands, oneThousand, "thousand");
-            PerformCount(ref input, ref hundreds, oneHundred, "hundred");
+            PrintNumberInEnglish(thousands);
+            PrintMultiplier(thousands, "thousand");
 
-
-            
-
-            
-
-            if (input > 0)
-            {
-                tens = input % 100;
-                Console.Write($"and {hundreds}");
-            }
-
+            PrintNumberInEnglish(input);
 
             Console.WriteLine();
-            //{tens}
         }
 
-        public static void PerformCount(ref long input, ref long trillions, long oneTrillion, string trillionString)
+        public static void PerformCount(ref long input, ref long quantityOfMulitpier, long mulitpier, string multiplierInEnglish)
         {
-            if (input >= oneTrillion)
+            if (input >= mulitpier)
             {
-                trillions = input / oneTrillion;
-                input -= (trillions * oneTrillion);
-                Console.Write($"{trillions} {trillionString}, ");
+                quantityOfMulitpier = input / mulitpier;
+                input -= (quantityOfMulitpier * mulitpier);
+            }
+        }
+
+        public static void PrintNumberInEnglish(long number)
+        {
+            string[] singleDigits = new string[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
+            string[] tensArray = new string[] { "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
+
+            bool useAnd = false;
+
+            if (number > 0)
+            {
+                if (number > 99)
+                {
+                    int hundreds = (int)number / 100;
+                    Console.Write($"{singleDigits[hundreds]} hundred ");
+                    number -= (hundreds * 100);
+                    useAnd = true;
+                }
+
+                if (number > 19)
+                {
+                    UseAndCheck(useAnd);
+                    useAnd = false;
+                    int tens = (int)number / 10;
+                    Console.Write($"{tensArray[tens]} ");
+                    number -= (tens * 10);
+                }
+
+                if (number > 0)
+                {
+                    UseAndCheck(useAnd);
+                    Console.Write($"{singleDigits[number]} ");
+                }
+                //Console.Write($"{number} ");
+            }
+
+        }
+
+        public static void PrintMultiplier(long multiplier, string multiplierInEnglish)
+        {
+            if (multiplier > 0)
+            {
+                Console.Write($"{multiplierInEnglish} ");
+            }
+
+        }
+
+        public static void UseAndCheck(bool useAnd)
+        {
+            if (useAnd)
+            {
+                Console.Write("and ");
             }
         }
     }
