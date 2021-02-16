@@ -6,7 +6,9 @@ namespace WriteNumbersOneToTrillion
     {
         static void Main(string[] args)
         {
-            long input = 101222333444555;
+            long input = 0;
+            bool startAgain = true;
+            bool validInput = false;
 
             long trillions = 0;
             long billions = 0;
@@ -18,13 +20,33 @@ namespace WriteNumbersOneToTrillion
             long oneMillion = 1000000;
             long oneThousand = 1000;
 
-            PerformCount(ref input, ref trillions, oneTrillion, "trillion");
-            PerformCount(ref input, ref billions, oneBillion, "billion");
-            PerformCount(ref input, ref millions, oneMillion, "million");
-            PerformCount(ref input, ref thousands, oneThousand, "thousand");
-            PrintNumberInEnglish(input);
+            while (startAgain)
+            {
+                while (!validInput)
+                {
+                    Console.Write("Please enter a number from one to one trillion");
+                    Console.WriteLine();
+                    input = long.Parse(Console.ReadLine());
+                    if (input > 0 && input <= oneTrillion)
+                    {
+                        validInput = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Try again");
+                    }
+                }
 
-            Console.WriteLine();
+                PerformCount(ref input, ref trillions, oneTrillion, "trillion");
+                PerformCount(ref input, ref billions, oneBillion, "billion");
+                PerformCount(ref input, ref millions, oneMillion, "million");
+                PerformCount(ref input, ref thousands, oneThousand, "thousand");
+                PrintNumberInEnglish(input);
+
+                Console.WriteLine();
+                validInput = false;
+            }
+
         }
 
         public static void PerformCount(ref long input, ref long quantityOfMulitpier, long mulitpier, string multiplierInEnglish)
@@ -50,6 +72,7 @@ namespace WriteNumbersOneToTrillion
 
             if (number > 0)
             {
+                // Print hundreds
                 if (number > 99)
                 {
                     int hundreds = (int)number / 100;
@@ -58,32 +81,30 @@ namespace WriteNumbersOneToTrillion
                     useAnd = true;
                 }
 
+                //Print tens larger than 19
                 if (number > 19)
                 {
+                    useAnd = CheckUseAnd(useAnd);
                     int tens = (int)number / 10;
-                    Console.Write($"and {tensArray[tens]} ");
+                    Console.Write($"{tensArray[tens]} ");
                     number -= (tens * 10);
-                    useAnd = false;
                 }
 
+                //Print teens
                 if (number > 9)
                 {
-                    Console.Write($"and {singleDigits[number]} ");
+                    useAnd = CheckUseAnd(useAnd);
+                    Console.Write($"{singleDigits[number]} ");
                     number = 0;
                 }
 
+                //Print single digits
                 if (number > 0)
                 {
-                    if (useAnd)
-                    {
-                        Console.Write($"and ");
-                    }
+                    useAnd = CheckUseAnd(useAnd);
                     Console.Write($"{singleDigits[number]} ");
                 }
-
-                //Console.Write($"{number} ");
             }
-
         }
 
         public static void PrintMultiplier(long multiplier, string multiplierInEnglish)
@@ -94,6 +115,13 @@ namespace WriteNumbersOneToTrillion
             }
         }
 
-        
+        public static bool CheckUseAnd(bool useAnd)
+        {
+            if (useAnd)
+            {
+                Console.Write("and ");
+            }
+            return false;
+        }
     }
 }
